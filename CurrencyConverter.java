@@ -1,27 +1,20 @@
-import java.util.HashMap;
-import java.util.Map;
-
 public class CurrencyConverter {
-    private static final Map<String, Double> exchangeRates = new HashMap<>();
 
-    static {
-        // Exchange rates relative to USD
-        exchangeRates.put("USD", 1.0);
-        exchangeRates.put("PKR", 278.0);
-        exchangeRates.put("EUR", 0.85);
-        exchangeRates.put("INR", 83.0);
+    public double convert(String fromCurrency, String toCurrency, double amount) {
+        double rate = getExchangeRate(fromCurrency, toCurrency);
+        return amount * rate;
     }
 
-    public static double convert(String fromCurrency, String toCurrency, double amount) {
-        if (!exchangeRates.containsKey(fromCurrency) || !exchangeRates.containsKey(toCurrency)) {
-            throw new IllegalArgumentException("Invalid currency code.");
+    private double getExchangeRate(String fromCurrency, String toCurrency) {
+        // Dummy exchange rates
+        if (fromCurrency.equals("USD") && toCurrency.equals("PKR")) {
+            return 278.5;
+        } else if (fromCurrency.equals("PKR") && toCurrency.equals("USD")) {
+            return 1 / 278.5;
+        } else if (fromCurrency.equals(toCurrency)) {
+            return 1.0;
+        } else {
+            throw new IllegalArgumentException("Unsupported currency conversion.");
         }
-
-        double amountInUSD = amount / exchangeRates.get(fromCurrency);
-        return amountInUSD * exchangeRates.get(toCurrency);
     }
-
-    public static void main(String[] args) {
-        double converted = convert("USD", "PKR", 10);
-        System.out.println("Converted amount: " + converted);
-    }
+}
